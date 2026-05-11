@@ -4,11 +4,31 @@ namespace Masmaleki\ZohoAllInOne\Http\Controllers\Records;
 
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Storage;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoTokenCheck;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ZohoSaleOrderController
 {
+    /**
+     * Absolute Zoho Books v3 URL (config host may omit https://).
+     *
+     * @param  string  $pathWithQuery  Example: salesorders/123/submit?organization_id=456
+     */
+    private static function booksApiV3Url(string $pathWithQuery): string
+    {
+        $pathWithQuery = ltrim($pathWithQuery, '/');
+        $base = (string) config('zoho-one.books_api_base_url');
+        if ($base === '') {
+            $base = 'www.zohoapis.eu';
+        }
+        if (! preg_match('#^https?://#i', $base)) {
+            $base = 'https://'.$base;
+        }
+
+        return rtrim($base, '/').'/books/v3/'.$pathWithQuery;
+    }
+
     public static function create($data = [])
     {
         $organization_id = $data['organization_id'] ?? null;
@@ -462,15 +482,38 @@ class ZohoSaleOrderController
         $file_path = $data['file_path'] ?? null;
 
         $token = ZohoTokenCheck::getToken();
-        if (!$token || !$sales_order_id || !$organization_id || !$file_path || !file_exists(storage_path('app/assets/' . $file_path))) {
+        if (! $token || ! $sales_order_id || ! $organization_id || ! $file_path) {
             return [
                 'code' => 498,
                 'message' => 'Invalid/missing token or required parameters or file not found.',
             ];
         }
 
+        $normalizedPath = ltrim(str_replace('\\', '/', (string) $file_path), '/');
+        $legacyAbsolute = storage_path('app/assets/'.$normalizedPath);
 
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/salesorders/' . $sales_order_id . '/attachment?organization_id=' . $organization_id;
+        $stream = null;
+        if (is_file($legacyAbsolute)) {
+            $stream = @fopen($legacyAbsolute, 'r');
+        }
+        if ((! is_resource($stream)) && class_exists(Storage::class)) {
+            try {
+                if (Storage::disk('assets')->exists($normalizedPath)) {
+                    $stream = Storage::disk('assets')->readStream($normalizedPath);
+                }
+            } catch (\Throwable) {
+                $stream = null;
+            }
+        }
+
+        if (! is_resource($stream)) {
+            return [
+                'code' => 498,
+                'message' => 'Invalid/missing token or required parameters or file not found.',
+            ];
+        }
+
+        $apiURL = self::booksApiV3Url('salesorders/'.$sales_order_id.'/attachment?organization_id='.$organization_id);
 
         $client = new Client();
 
@@ -481,17 +524,18 @@ class ZohoSaleOrderController
         try {
             $response = $client->request('POST', $apiURL, [
                 'headers' => $headers,
+                'http_errors' => false,
                 'multipart' => [
                     [
                         'name' => 'attachment',
-                        'contents' => fopen(storage_path('app/assets/' . $file_path), 'r'),
-                        'filename' => basename($file_path),
+                        'contents' => $stream,
+                        'filename' => basename($normalizedPath),
                     ],
                 ],
             ]);
 
             $statusCode = $response->getStatusCode();
-            $responseBody = json_decode($response->getBody(), true);
+            $responseBody = json_decode($response->getBody()->getContents(), true);
 
             return [
                 'code' => $statusCode,
@@ -502,6 +546,10 @@ class ZohoSaleOrderController
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ];
+        } finally {
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
         }
     }
 
@@ -553,14 +601,16 @@ class ZohoSaleOrderController
         $organization_id = $data['organization_id'] ?? null;
 
         $token = ZohoTokenCheck::getToken();
-        if (!$token || !$sales_order_id || !$organization_id) {
+        if (! $token || ! $sales_order_id || ! $organization_id) {
             return [
+                'success' => false,
                 'code' => 498,
                 'message' => 'Invalid/missing token or required parameters.',
+                'response' => null,
             ];
         }
 
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/salesorders/' . $sales_order_id . '/submit?organization_id=' . $organization_id;
+        $apiURL = self::booksApiV3Url('salesorders/'.$sales_order_id.'/submit?organization_id='.$organization_id);
 
         $client = new Client();
 
@@ -571,19 +621,27 @@ class ZohoSaleOrderController
         try {
             $response = $client->request('POST', $apiURL, [
                 'headers' => $headers,
+                'http_errors' => false,
             ]);
 
-            $statusCode = $response->getStatusCode();
-            $responseBody = json_decode($response->getBody(), true);
+            $httpCode = $response->getStatusCode();
+            $responseBody = json_decode($response->getBody()->getContents(), true);
+            $responseBody = is_array($responseBody) ? $responseBody : [];
+            $booksCode = (int) ($responseBody['code'] ?? -1);
+            $success = $httpCode >= 200 && $httpCode < 300 && $booksCode === 0;
 
             return [
-                'code' => $statusCode,
+                'success' => $success,
+                'code' => $httpCode,
                 'response' => $responseBody,
+                'message' => (string) ($responseBody['message'] ?? ''),
             ];
         } catch (\Exception $e) {
             return [
-                'code' => $e->getCode(),
+                'success' => false,
+                'code' => $e->getCode() ?: 1,
                 'message' => $e->getMessage(),
+                'response' => null,
             ];
         }
     }
