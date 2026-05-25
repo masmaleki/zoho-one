@@ -88,10 +88,11 @@ class ZohoCustomTokenStore
             $z_api_url = config('zoho-one.api_base_url');
             $location = config('zoho-one.location');
         } else {
-            $z_url = config('zoho-one.accounts_url_' . $organizationId);
-            $z_return_url = config('zoho-one.redirect_uri_' . $organizationId);
-            $z_api_url = config('zoho-one.api_base_url_' . $organizationId);
-            $location = config('zoho-one.location_' . $organizationId);
+            $orgId = (int) $organizationId;
+            $z_url = ZohoOrgCredentials::get($orgId, 'accounts_url') ?: config('zoho-one.accounts_url');
+            $z_return_url = ZohoOrgCredentials::get($orgId, 'redirect_uri') ?: config('zoho-one.redirect_uri');
+            $z_api_url = ZohoOrgCredentials::get($orgId, 'api_base_url') ?: config('zoho-one.api_base_url');
+            $location = ZohoOrgCredentials::get($orgId, 'location') ?: config('zoho-one.location');
         }
 
 
@@ -101,7 +102,7 @@ class ZohoCustomTokenStore
         if (array_key_exists('error', $refreshed_token_resp ?? [])) {
             return null;
         }
-        $token->organization_id = $organizationId ?? 1;
+        $token->organization_id = $organizationId ?? $token->organization_id;
         $token->access_token = $refreshed_token_resp['access_token'];
         $now = Carbon::now();
         $token->expiry_time = $now->add($refreshed_token_resp['expires_in'], 'seconds');
