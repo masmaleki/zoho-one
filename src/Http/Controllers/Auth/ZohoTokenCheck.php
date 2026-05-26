@@ -66,9 +66,9 @@ class ZohoTokenCheck
             $resp = $zoho->getToken($data['accounts-server'], $data['location'], $postInput);
             $zoho->saveToken($postInput, $resp, $client_id, $secret_key, $z_return_url, $organizationId);
         }
-        $message = 'Token is created now!';
+        $frontendUrl = rtrim(config('app.url_ui', config('app.url')), '/');
 
-        return '<h1>' . $message . '</h1>';
+        return redirect($frontendUrl . '/setting/token_settings?zoho_connected=1');
     }
 
 }
