@@ -75,6 +75,65 @@ To upgrade:
 | PHP | 8.2 / 8.3 / 8.4 |
 | Laravel | 10.x / 11.x / 12.x / 13.x |
 
+## Zoho Books customization resources
+
+The package includes helpers for Zoho Books customization resources. These methods use the configured
+Books API base URL from `config('zoho-one.books_api_base_url')`, the saved Zoho access token, and the
+Zoho Books organization ID passed to the method.
+
+```php
+use Masmaleki\ZohoAllInOne\ZohoAllInOne;
+
+$organizationId = 123456789;
+
+$customField = ZohoAllInOne::createBooksCustomField([
+    'label' => 'Internal Number',
+    'data_type' => 'string',
+], $organizationId);
+
+$webhook = ZohoAllInOne::createBooksWebhook([
+    'name' => 'Sales order sync',
+    'url' => 'https://example.com/api/zoho/books/webhook',
+], $organizationId);
+
+$customFunction = ZohoAllInOne::createBooksCustomFunction([
+    'name' => 'Sync sales order',
+    'script' => '// Deluge script body',
+], $organizationId);
+
+$customAction = ZohoAllInOne::createBooksCustomAction([
+    'name' => 'Run sync',
+], $organizationId);
+```
+
+Available helper groups:
+
+```php
+ZohoAllInOne::getBooksCustomFields($organizationId, $query = []);
+ZohoAllInOne::createBooksCustomField($data, $organizationId);
+ZohoAllInOne::getBooksCustomField($fieldId, $organizationId);
+ZohoAllInOne::updateBooksCustomField($fieldId, $data, $organizationId);
+ZohoAllInOne::deleteBooksCustomField($fieldId, $organizationId);
+
+ZohoAllInOne::getBooksWebhooks($organizationId, $query = []);
+ZohoAllInOne::createBooksWebhook($data, $organizationId);
+ZohoAllInOne::getBooksWebhook($webhookId, $organizationId);
+ZohoAllInOne::updateBooksWebhook($webhookId, $data, $organizationId);
+ZohoAllInOne::deleteBooksWebhook($webhookId, $organizationId);
+
+ZohoAllInOne::getBooksCustomFunctions($organizationId, $query = []);
+ZohoAllInOne::createBooksCustomFunction($data, $organizationId);
+ZohoAllInOne::getBooksCustomFunction($functionId, $organizationId);
+ZohoAllInOne::updateBooksCustomFunction($functionId, $data, $organizationId);
+ZohoAllInOne::deleteBooksCustomFunction($functionId, $organizationId);
+
+ZohoAllInOne::getBooksCustomActions($organizationId, $query = []);
+ZohoAllInOne::createBooksCustomAction($data, $organizationId);
+ZohoAllInOne::getBooksCustomAction($actionId, $organizationId);
+ZohoAllInOne::updateBooksCustomAction($actionId, $data, $organizationId);
+ZohoAllInOne::deleteBooksCustomAction($actionId, $organizationId);
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
