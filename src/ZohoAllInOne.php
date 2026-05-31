@@ -5,6 +5,7 @@ namespace Masmaleki\ZohoAllInOne;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Bulk\ZohoBulkReadController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Bulk\ZohoBulkWriteController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Other\ZohoCompositeAPIController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Functions\ZohoBooksCustomFunctionController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoAvailabilityController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoCallController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Functions\ZohoFunctionApiController;
@@ -32,6 +33,9 @@ use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoSaleOrderController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoTaskController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoVendorController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoVendorRFQController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Settings\ZohoBooksCustomActionController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Settings\ZohoBooksCustomFieldController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Settings\ZohoBooksWebhookController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Settings\ZohoCrmOrganizationController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Users\ZohoOrganizationController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Settings\ZohoRoleController;
@@ -993,6 +997,106 @@ class ZohoAllInOne
     public static function getOrganization()
     {
         return ZohoCrmOrganizationController::get();
+    }
+
+    public static function getBooksCustomFields($organization_id, $query = [])
+    {
+        return ZohoBooksCustomFieldController::getAll($organization_id, $query);
+    }
+
+    public static function createBooksCustomField($data, $organization_id)
+    {
+        return ZohoBooksCustomFieldController::create($data, $organization_id);
+    }
+
+    public static function getBooksCustomField($field_id, $organization_id)
+    {
+        return ZohoBooksCustomFieldController::get($field_id, $organization_id);
+    }
+
+    public static function updateBooksCustomField($field_id, $data, $organization_id)
+    {
+        return ZohoBooksCustomFieldController::update($field_id, $data, $organization_id);
+    }
+
+    public static function deleteBooksCustomField($field_id, $organization_id)
+    {
+        return ZohoBooksCustomFieldController::delete($field_id, $organization_id);
+    }
+
+    public static function getBooksWebhooks($organization_id, $query = [])
+    {
+        return ZohoBooksWebhookController::getAll($organization_id, $query);
+    }
+
+    public static function createBooksWebhook($data, $organization_id)
+    {
+        return ZohoBooksWebhookController::create($data, $organization_id);
+    }
+
+    public static function getBooksWebhook($webhook_id, $organization_id)
+    {
+        return ZohoBooksWebhookController::get($webhook_id, $organization_id);
+    }
+
+    public static function updateBooksWebhook($webhook_id, $data, $organization_id)
+    {
+        return ZohoBooksWebhookController::update($webhook_id, $data, $organization_id);
+    }
+
+    public static function deleteBooksWebhook($webhook_id, $organization_id)
+    {
+        return ZohoBooksWebhookController::delete($webhook_id, $organization_id);
+    }
+
+    public static function getBooksCustomFunctions($organization_id, $query = [])
+    {
+        return ZohoBooksCustomFunctionController::getAll($organization_id, $query);
+    }
+
+    public static function createBooksCustomFunction($data, $organization_id)
+    {
+        return ZohoBooksCustomFunctionController::create($data, $organization_id);
+    }
+
+    public static function getBooksCustomFunction($function_id, $organization_id)
+    {
+        return ZohoBooksCustomFunctionController::get($function_id, $organization_id);
+    }
+
+    public static function updateBooksCustomFunction($function_id, $data, $organization_id)
+    {
+        return ZohoBooksCustomFunctionController::update($function_id, $data, $organization_id);
+    }
+
+    public static function deleteBooksCustomFunction($function_id, $organization_id)
+    {
+        return ZohoBooksCustomFunctionController::delete($function_id, $organization_id);
+    }
+
+    public static function getBooksCustomActions($organization_id, $query = [])
+    {
+        return ZohoBooksCustomActionController::getAll($organization_id, $query);
+    }
+
+    public static function createBooksCustomAction($data, $organization_id)
+    {
+        return ZohoBooksCustomActionController::create($data, $organization_id);
+    }
+
+    public static function getBooksCustomAction($action_id, $organization_id)
+    {
+        return ZohoBooksCustomActionController::get($action_id, $organization_id);
+    }
+
+    public static function updateBooksCustomAction($action_id, $data, $organization_id)
+    {
+        return ZohoBooksCustomActionController::update($action_id, $data, $organization_id);
+    }
+
+    public static function deleteBooksCustomAction($action_id, $organization_id)
+    {
+        return ZohoBooksCustomActionController::delete($action_id, $organization_id);
     }
     // end - settings functions
 
