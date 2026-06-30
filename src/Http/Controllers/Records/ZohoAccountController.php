@@ -57,7 +57,7 @@ class ZohoAccountController
         if (!$token) {
             return null;
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/contacts?page=' . $page . $condition;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/contacts?page=' . $page . $condition;
 
         if ($organization_id) {
             $apiURL .= '&organization_id=' . $organization_id;
@@ -283,7 +283,7 @@ class ZohoAccountController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/contacts?organization_id=' . $organization_id . '&zcrm_account_id=' . $zoho_crm_account_id . '';
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/contacts?organization_id=' . $organization_id . '&zcrm_account_id=' . $zoho_crm_account_id . '';
 
         $client = new Client();
 
@@ -313,7 +313,7 @@ class ZohoAccountController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/contacts/' . $zoho_books_customer_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/contacts/' . $zoho_books_customer_id;
         if ($organization_id) {
             $apiURL .= '?organization_id=' . $organization_id;
         }
@@ -342,7 +342,7 @@ class ZohoAccountController
         if (!$token) {
             return null;
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/contacts';
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/contacts';
         if ($organization_id) {
             $apiURL .= '?organization_id=' . $organization_id;
         }
@@ -378,7 +378,7 @@ class ZohoAccountController
         if (!$token) {
             return null;
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/contacts/' . $zoho_books_item_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/contacts/' . $zoho_books_item_id;
         if ($organization_id) {
             $apiURL .= '?organization_id=' . $organization_id;
         }

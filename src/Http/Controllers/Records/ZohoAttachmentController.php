@@ -148,7 +148,7 @@ class ZohoAttachmentController
             ];
         }
 
-        $apiURL = config('zoho-one.books_api_base_url') . "/books/v3/$module/$module_id/attachment?organization_id=$organization_id";
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . "/books/v3/$module/$module_id/attachment?organization_id=$organization_id";
 
         $client = new Client();
 

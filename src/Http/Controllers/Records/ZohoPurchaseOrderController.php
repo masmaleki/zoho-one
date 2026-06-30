@@ -19,7 +19,7 @@ class ZohoPurchaseOrderController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/purchaseorders?organization_id=' . $organization_id . '&page=' . $page . $condition;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/purchaseorders?organization_id=' . $organization_id . '&page=' . $page . $condition;
 
         $client = new Client();
 
@@ -50,7 +50,7 @@ class ZohoPurchaseOrderController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/purchaseorders/' . $purchase_order_id . '?organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/purchaseorders/' . $purchase_order_id . '?organization_id=' . $organization_id;
 
         $client = new Client();
 
@@ -121,7 +121,7 @@ class ZohoPurchaseOrderController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/purchaseorders?organization_id=' . $organization_id . '&vendor_id=' . $zoho_vendor_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/purchaseorders?organization_id=' . $organization_id . '&vendor_id=' . $zoho_vendor_id;
         $client = new Client();
 
         $headers = [
@@ -151,7 +151,7 @@ class ZohoPurchaseOrderController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/purchaseorders?page=1&per_page=200&sort_column=created_time&sort_order=D&custom_field_222119000000940129_contains=' . $item_name . '&organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/purchaseorders?page=1&per_page=200&sort_column=created_time&sort_order=D&custom_field_222119000000940129_contains=' . $item_name . '&organization_id=' . $organization_id;
         $client = new Client();
 
         $headers = [
@@ -181,7 +181,7 @@ class ZohoPurchaseOrderController
                 'message' => 'Invalid or missing token.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/purchaseorders?&vendor_id=' . $zoho_vendor_id . '&organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/purchaseorders?&vendor_id=' . $zoho_vendor_id . '&organization_id=' . $organization_id;
 
         if ($searchParameter) {
             $apiURL .= '&salesorder_number_contains=' . $searchParameter;
@@ -216,7 +216,7 @@ class ZohoPurchaseOrderController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/purchaseorders/' . $purchase_order_id . '?accept=pdf';
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/purchaseorders/' . $purchase_order_id . '?accept=pdf';
         $client = new Client();
 
         $headers = [
@@ -398,7 +398,7 @@ class ZohoPurchaseOrderController
             ];
         }
 
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/purchaseorders/' . $purchase_order_id . '/comments?organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/purchaseorders/' . $purchase_order_id . '/comments?organization_id=' . $organization_id;
 
         $client = new Client();
 
