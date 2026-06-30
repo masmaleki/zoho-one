@@ -109,7 +109,7 @@ class ZohoProductController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items/' . $zoho_books_item_id . '?organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items/' . $zoho_books_item_id . '?organization_id=' . $organization_id;
         $client = new Client();
         $headers = [
             'Authorization' => 'Zoho-oauthtoken ' . $token->access_token,
@@ -134,7 +134,7 @@ class ZohoProductController
         if (!$token) {
             return null;
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items?page=' . $page . $condition;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items?page=' . $page . $condition;
         if ($organization_id) {
             $apiURL .= '&organization_id=' . $organization_id;
         }
@@ -166,7 +166,7 @@ class ZohoProductController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items?page=1&per_page=25&sort_column=created_time&sort_order=A&name_contains=' . $product_name;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items?page=1&per_page=25&sort_column=created_time&sort_order=A&name_contains=' . $product_name;
         if ($organization_id) {
             $apiURL .= '&organization_id=' . $organization_id;
         }
@@ -297,7 +297,7 @@ class ZohoProductController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items/' . $zoho_books_item_id . '?organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items/' . $zoho_books_item_id . '?organization_id=' . $organization_id;
 
         $client = new Client();
 
@@ -326,7 +326,7 @@ class ZohoProductController
         if (!$token) {
             return null;
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items';
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items';
         if ($organization_id) {
             $apiURL .= '?organization_id=' . $organization_id;
         }
@@ -433,7 +433,7 @@ class ZohoProductController
         if (!$token) {
             return null;
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items/' . $zoho_books_item_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items/' . $zoho_books_item_id;
         if ($organization_id) {
             $apiURL .= '?organization_id=' . $organization_id;
         }
@@ -492,7 +492,7 @@ class ZohoProductController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items/' . $zoho_books_item_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items/' . $zoho_books_item_id;
         if ($organization_id) {
             $apiURL .= '?organization_id=' . $organization_id;
         }
@@ -518,7 +518,7 @@ class ZohoProductController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/items/' . $zoho_books_item_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/items/' . $zoho_books_item_id;
         if ($organization_id) {
             $apiURL .= '?organization_id=' . $organization_id;
         }

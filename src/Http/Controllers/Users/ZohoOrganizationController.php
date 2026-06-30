@@ -15,7 +15,7 @@ class ZohoOrganizationController
             return null;
         }
 
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/organizations';
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/organizations';
 
         $client = new Client();
         $postInput = [

@@ -19,7 +19,7 @@ class ZohoCustomerController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/contacts/?organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/contacts/?organization_id=' . $organization_id;
 
         $client = new Client();
 
@@ -56,7 +56,7 @@ class ZohoCustomerController
                 'message' => 'Invalid/missing token, organization ID, or contact ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/contacts/' . $contact_id . '?organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/contacts/' . $contact_id . '?organization_id=' . $organization_id;
 
         $client = new Client();
 

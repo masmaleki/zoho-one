@@ -18,7 +18,7 @@ class ZohoPackageController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/packages?organization_id=' . $organization_id . '&page=' . $page . $condition;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/packages?organization_id=' . $organization_id . '&page=' . $page . $condition;
 
         $client = new Client();
 
@@ -49,7 +49,7 @@ class ZohoPackageController
                 'message' => 'Invalid/missing token or organization ID.',
             ];
         }
-        $apiURL = config('zoho-one.books_api_base_url') . '/books/v3/packages?customer_id=' . $zoho_customer_id . '&organization_id=' . $organization_id;
+        $apiURL = \Masmaleki\ZohoAllInOne\Http\Controllers\Auth\ZohoOrgCredentials::booksApiBaseUrl() . '/books/v3/packages?customer_id=' . $zoho_customer_id . '&organization_id=' . $organization_id;
 
         if ($searchParameter) {
             $apiURL .= '&package_number_contains=' . $searchParameter;
