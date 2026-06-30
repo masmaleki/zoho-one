@@ -19,7 +19,16 @@ class ZohoTokenCheck
             $expiry_time = Carbon::parse($zoho_token->expiry_time);
             if ($expiry_time->lt(Carbon::now())) {
                 $zoho = new ZohoCustomTokenStore();
-                $zoho_token = $zoho->refreshToken($zoho_token->id, $organizationId);
+                // Use the RESOLVED org id ($org, which falls back to the ambient
+                // current_internal_organization_id), not the raw $organizationId
+                // argument. Callers like the Books controllers invoke getToken()
+                // with no argument and rely on ambient org context; passing the
+                // raw (null) value here makes refreshToken() use the GLOBAL
+                // accounts_url/location instead of the organization's own
+                // datacenter, so refreshing an expired token for an org on a
+                // non-default datacenter (e.g. a US org while the global default
+                // is EU) fails and getToken() returns null (-> 498).
+                $zoho_token = $zoho->refreshToken($zoho_token->id, $org);
             }
             return $zoho_token;
         }
