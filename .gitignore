@@ -10,3 +10,6 @@ phpstan.neon
 testbench.yaml
 vendor
 node_modules
+
+# AI assistant working files
+.ai/
