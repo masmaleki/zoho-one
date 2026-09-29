@@ -134,6 +134,66 @@ ZohoAllInOne::updateBooksCustomAction($actionId, $data, $organizationId);
 ZohoAllInOne::deleteBooksCustomAction($actionId, $organizationId);
 ```
 
+## Zoho Books fulfilment (packages, shipments, receives, transfers, adjustments, batches)
+
+These helpers target `/books/v3` on the organization's own datacenter
+(`ZohoOrgCredentials::booksApiBaseUrl($internalOrganizationId)`). `$organizationId` is the **Zoho Books**
+organization id; the optional trailing `$internalOrganizationId` is your application's organization id, used
+for the token lookup and the datacenter (null = the ambient `zoho-one.current_internal_organization_id`).
+`$condition` is an array of Zoho filters or the legacy `"&key=value"` string.
+
+They share `ZohoBooksInventoryRequest`: success returns the decoded Zoho body; failure returns
+`['code' => <Zoho code or HTTP status>, 'message' => <Zoho message>, 'http_status' => int|null,
+'retry_after' => int|null (HTTP 429 Retry-After), 'zoho_one_error' => true]`. The access token never appears
+in a failure. For tests, `ZohoBooksInventoryRequest::useHttpClient(fn () => $guzzleClient)` and
+`ZohoBooksInventoryRequest::resolveTokenUsing(fn ($internalOrgId) => (object) ['access_token' => '…'])`
+replace the transport and the token source (pass `null` to restore).
+
+```php
+// Packages
+ZohoAllInOne::listPackages($organizationId, $page = 1, $condition = '', $internalOrganizationId = null);
+ZohoAllInOne::getPackage($packageId, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::createPackage($salesOrderId, array $payload, $organizationId, $internalOrganizationId = null); // POST /packages?salesorder_id=
+ZohoAllInOne::updatePackage($packageId, array $payload, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::deletePackage($packageId, $organizationId, $internalOrganizationId = null);
+
+// Shipment orders
+ZohoAllInOne::getShipmentOrders($organizationId, $page = 1, $condition = '', $internalOrganizationId = null);
+ZohoAllInOne::getShipmentOrder($shipmentOrderId, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::createShipmentOrder(array $packageIds, $salesOrderId, array $payload, $organizationId, $internalOrganizationId = null); // POST /shipmentorders?package_ids=a,b&salesorder_id=
+ZohoAllInOne::updateShipmentOrder($shipmentOrderId, array $payload, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::deleteShipmentOrder($shipmentOrderId, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::markShipmentOrderDelivered($shipmentOrderId, $organizationId, $internalOrganizationId = null); // POST /shipmentorders/{id}/status/delivered
+
+// Purchase receives
+ZohoAllInOne::getPurchaseReceives($organizationId, $page = 1, $condition = '', $internalOrganizationId = null);
+ZohoAllInOne::getPurchaseReceive($purchaseReceiveId, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::createPurchaseReceive($purchaseOrderId, array $payload, $organizationId, $internalOrganizationId = null); // POST /purchasereceives?purchaseorder_id=
+ZohoAllInOne::updatePurchaseReceive($purchaseReceiveId, array $payload, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::deletePurchaseReceive($purchaseReceiveId, $organizationId, $internalOrganizationId = null);
+
+// Transfer orders
+ZohoAllInOne::getTransferOrders($organizationId, $page = 1, $condition = '', $internalOrganizationId = null);
+ZohoAllInOne::getTransferOrder($transferOrderId, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::createTransferOrder(array $payload, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::updateTransferOrder($transferOrderId, array $payload, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::deleteTransferOrder($transferOrderId, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::markTransferOrderTransferred($transferOrderId, $organizationId, $internalOrganizationId = null); // UNVERIFIED: POST /transferorders/{id}/markastransferred
+
+// Inventory adjustments
+ZohoAllInOne::getInventoryAdjustments($organizationId, $page = 1, $condition = '', $internalOrganizationId = null);
+ZohoAllInOne::getInventoryAdjustment($inventoryAdjustmentId, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::createInventoryAdjustment(array $payload, $organizationId, $internalOrganizationId = null);
+ZohoAllInOne::deleteInventoryAdjustment($inventoryAdjustmentId, $organizationId, $internalOrganizationId = null);
+
+// Item batches — UNVERIFIED endpoint: GET /items/{id}/batches, falling back to GET /items/{id} → item.batches
+// on 404 / Zoho code 5; the result carries batches_source (batches_endpoint | item_detail | item_detail_without_batches).
+ZohoAllInOne::getItemBatches($itemId, $organizationId, $internalOrganizationId = null);
+```
+
+Endpoints marked UNVERIFIED come from the Zoho Inventory API reference and have not yet been confirmed on a live
+Books organization.
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
