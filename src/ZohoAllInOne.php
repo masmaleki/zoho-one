@@ -26,6 +26,11 @@ use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoImageController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoInvoiceController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoLeadController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoPackageController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoShipmentOrderController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoPurchaseReceiveController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoTransferOrderController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoInventoryAdjustmentController;
+use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoItemBatchController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoProductController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoQuoteController;
 use Masmaleki\ZohoAllInOne\Http\Controllers\Records\ZohoRecentModuleController;
@@ -531,7 +536,159 @@ class ZohoAllInOne
     {
         return ZohoPackageController::searchByCustomerId($zoho_customer_id, $searchParameter, $organization_id);
     }
+
+    public static function listPackages($organization_id, $page = 1, $condition = '', $internal_organization_id = null)
+    {
+        return ZohoPackageController::list($organization_id, $page, $condition, $internal_organization_id);
+    }
+
+    public static function getPackage($package_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPackageController::get($package_id, $organization_id, $internal_organization_id);
+    }
+
+    public static function createPackage($sales_order_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPackageController::create($sales_order_id, $payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function updatePackage($package_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPackageController::update($package_id, $payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function deletePackage($package_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPackageController::delete($package_id, $organization_id, $internal_organization_id);
+    }
     // end - packages functions
+
+    // start - shipment orders functions
+
+    public static function getShipmentOrders($organization_id, $page = 1, $condition = '', $internal_organization_id = null)
+    {
+        return ZohoShipmentOrderController::getAll($organization_id, $page, $condition, $internal_organization_id);
+    }
+
+    public static function getShipmentOrder($shipment_order_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoShipmentOrderController::get($shipment_order_id, $organization_id, $internal_organization_id);
+    }
+
+    public static function createShipmentOrder(array $package_ids, $sales_order_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoShipmentOrderController::create($package_ids, $sales_order_id, $payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function updateShipmentOrder($shipment_order_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoShipmentOrderController::update($shipment_order_id, $payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function deleteShipmentOrder($shipment_order_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoShipmentOrderController::delete($shipment_order_id, $organization_id, $internal_organization_id);
+    }
+
+    public static function markShipmentOrderDelivered($shipment_order_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoShipmentOrderController::markDelivered($shipment_order_id, $organization_id, $internal_organization_id);
+    }
+    // end - shipment orders functions
+
+    // start - purchase receives functions
+
+    public static function getPurchaseReceives($organization_id, $page = 1, $condition = '', $internal_organization_id = null)
+    {
+        return ZohoPurchaseReceiveController::getAll($organization_id, $page, $condition, $internal_organization_id);
+    }
+
+    public static function getPurchaseReceive($purchase_receive_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPurchaseReceiveController::get($purchase_receive_id, $organization_id, $internal_organization_id);
+    }
+
+    public static function createPurchaseReceive($purchase_order_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPurchaseReceiveController::create($purchase_order_id, $payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function updatePurchaseReceive($purchase_receive_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPurchaseReceiveController::update($purchase_receive_id, $payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function deletePurchaseReceive($purchase_receive_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoPurchaseReceiveController::delete($purchase_receive_id, $organization_id, $internal_organization_id);
+    }
+    // end - purchase receives functions
+
+    // start - transfer orders functions
+
+    public static function getTransferOrders($organization_id, $page = 1, $condition = '', $internal_organization_id = null)
+    {
+        return ZohoTransferOrderController::getAll($organization_id, $page, $condition, $internal_organization_id);
+    }
+
+    public static function getTransferOrder($transfer_order_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoTransferOrderController::get($transfer_order_id, $organization_id, $internal_organization_id);
+    }
+
+    public static function createTransferOrder(array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoTransferOrderController::create($payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function updateTransferOrder($transfer_order_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoTransferOrderController::update($transfer_order_id, $payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function deleteTransferOrder($transfer_order_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoTransferOrderController::delete($transfer_order_id, $organization_id, $internal_organization_id);
+    }
+
+    /** UNVERIFIED endpoint — see ZohoTransferOrderController::markTransferred(). */
+    public static function markTransferOrderTransferred($transfer_order_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoTransferOrderController::markTransferred($transfer_order_id, $organization_id, $internal_organization_id);
+    }
+    // end - transfer orders functions
+
+    // start - inventory adjustments functions
+
+    public static function getInventoryAdjustments($organization_id, $page = 1, $condition = '', $internal_organization_id = null)
+    {
+        return ZohoInventoryAdjustmentController::getAll($organization_id, $page, $condition, $internal_organization_id);
+    }
+
+    public static function getInventoryAdjustment($inventory_adjustment_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoInventoryAdjustmentController::get($inventory_adjustment_id, $organization_id, $internal_organization_id);
+    }
+
+    public static function createInventoryAdjustment(array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoInventoryAdjustmentController::create($payload, $organization_id, $internal_organization_id);
+    }
+
+    public static function deleteInventoryAdjustment($inventory_adjustment_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoInventoryAdjustmentController::delete($inventory_adjustment_id, $organization_id, $internal_organization_id);
+    }
+    // end - inventory adjustments functions
+
+    // start - item batches functions
+
+    /** UNVERIFIED endpoint shape — see ZohoItemBatchController. */
+    public static function getItemBatches($item_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoItemBatchController::getItemBatches($item_id, $organization_id, $internal_organization_id);
+    }
+    // end - item batches functions
 
     // start - deals functions
     public static function getCRMDealV6($deal_id)

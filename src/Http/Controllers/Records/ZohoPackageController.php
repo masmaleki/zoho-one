@@ -74,4 +74,48 @@ class ZohoPackageController
         return $responseBody;
     }
 
+    // --- Fulfilment (single package read + write). Go through ZohoBooksInventoryRequest so a
+    // failure carries Zoho's own code/message, the HTTP status and Retry-After. ---
+
+    /**
+     * GET /books/v3/packages?page=&... — same list as getAll(), through ZohoBooksInventoryRequest
+     * (array or legacy "&k=v" condition, explicit internal organization, structured failures).
+     */
+    public static function list($organization_id, $page = 1, $condition = '', $internal_organization_id = null)
+    {
+        $query = array_merge(ZohoBooksInventoryRequest::conditionToQuery($condition), ['page' => $page]);
+
+        return ZohoBooksInventoryRequest::send('GET', '/packages', $organization_id, null, $query, $internal_organization_id);
+    }
+
+    /** GET /books/v3/packages/{package_id} */
+    public static function get($package_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoBooksInventoryRequest::send('GET', '/packages/' . rawurlencode((string) $package_id), $organization_id, null, [], $internal_organization_id);
+    }
+
+    /**
+     * POST /books/v3/packages?salesorder_id={sales_order_id}
+     * Payload: package_number (optional when auto-numbering), date, line_items[] (so_line_item_id,
+     * quantity, batches[] for batch-tracked items — batch shape UNVERIFIED), notes.
+     */
+    public static function create($sales_order_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoBooksInventoryRequest::send('POST', '/packages', $organization_id, $payload, [
+            'salesorder_id' => $sales_order_id,
+        ], $internal_organization_id);
+    }
+
+    /** PUT /books/v3/packages/{package_id} */
+    public static function update($package_id, array $payload, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoBooksInventoryRequest::send('PUT', '/packages/' . rawurlencode((string) $package_id), $organization_id, $payload, [], $internal_organization_id);
+    }
+
+    /** DELETE /books/v3/packages/{package_id} (Books is expected to refuse a shipped package — UNVERIFIED). */
+    public static function delete($package_id, $organization_id, $internal_organization_id = null)
+    {
+        return ZohoBooksInventoryRequest::send('DELETE', '/packages/' . rawurlencode((string) $package_id), $organization_id, null, [], $internal_organization_id);
+    }
+
 }
